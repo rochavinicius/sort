@@ -1,7 +1,7 @@
 sort
 ====
 
-ps.: **modified by Alexandre Amory to remove CUDA code.**
+Obs.: **Modified to remove CUDA code.**
 
 
 Repository of sorting algorithms in C.
