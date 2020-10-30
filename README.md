@@ -32,7 +32,7 @@ Run the MAKEFILE
 To run the program, type:
 
 ```c
-./a.out -a $algorithm -n $number_of_elements -s $state [-P]
+./app -a $algorithm -n $number_of_elements -s $state [-P]
 ```
 ### Parameters
 
@@ -44,8 +44,8 @@ To run the program, type:
 | Param         | Value         | 
 | ------------- |:-------------:| 
 | -a            | selection     |
-|               |  insertion    |
-|               |   shell       | 
+|               | insertion     |
+|               | shell         | 
 |               | quick         | 
 |               | heap          | 
 |               | merge         | 
