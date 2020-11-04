@@ -1,6 +1,8 @@
 sort
 ====
 
+[<img alt="Build Status" src="https://travis-ci.com/rochavinicius/sort.svg?branch=main" height="40">][travis-url]
+
 Obs.: **Modified to remove CUDA code.**
 
 
@@ -55,3 +57,6 @@ To run the program, type:
 |               | descending    | 
 |               | almost        | 
 | -P            |
+
+
+[travis-url]: https://travis-ci.org/github/rochavinicius/sort

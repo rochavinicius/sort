@@ -1,99 +1,107 @@
-################################################################################
-# Modified by Eugenio Pacceli in order to compile and link CUDA code with gcc's
-# generated objects.
-#
-# You must have CUDA TOOLKIT 6, nvcc, gcc or g++ in order to run this Makefile.
-# Tested on Debian testing/sid 64 bits, using the instructions in this article:
-#
-# http://prosciens.com/prosciens/how-to-install-nvidia-cuda-6-and-compile-all-the-samples-in-debian-testing-x86_64/
-################################################################################
-#
-# Copyright 1993-2013 NVIDIA Corporation.  All rights reserved.
-#
-# NOTICE TO USER:
-#
-# This source code is subject to NVIDIA ownership rights under U.S. and
-# international Copyright laws.
-#
-# NVIDIA MAKES NO REPRESENTATION ABOUT THE SUITABILITY OF THIS SOURCE
-# CODE FOR ANY PURPOSE.  IT IS PROVIDED "AS IS" WITHOUT EXPRESS OR
-# IMPLIED WARRANTY OF ANY KIND.  NVIDIA DISCLAIMS ALL WARRANTIES WITH
-# REGARD TO THIS SOURCE CODE, INCLUDING ALL IMPLIED WARRANTIES OF
-# MERCHANTABILITY, NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE.
-# IN NO EVENT SHALL NVIDIA BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL,
-# OR CONSEQUENTIAL DAMAGES, OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS
-# OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE
-# OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE
-# OR PERFORMANCE OF THIS SOURCE CODE.
-#
-# U.S. Government End Users.  This source code is a "commercial item" as
-# that term is defined at 48 C.F.R. 2.101 (OCT 1995), consisting  of
-# "commercial computer software" and "commercial computer software
-# documentation" as such terms are used in 48 C.F.R. 12.212 (SEPT 1995)
-# and is provided to the U.S. Government only as a commercial end item.
-# Consistent with 48 C.F.R.12.212 and 48 C.F.R. 227.7202-1 through
-# 227.7202-4 (JUNE 1995), all U.S. Government End Users acquire the
-# source code with only those rights set forth herein.
-#
-################################################################################
-#
-# Makefile project only supported on Mac OS X and Linux Platforms)
-#
-###############################################################################
-OSUPPER = $(shell uname -s 2>/dev/null | tr "[:lower:]" "[:upper:]")
-OSLOWER = $(shell uname -s 2>/dev/null | tr "[:upper:]" "[:lower:]")
-
-# internal flags
-CCFLAGS     :=
-LDFLAGS     :=
-
-# Extra user flags
-EXTRA_LDFLAGS     ?=
-EXTRA_CCFLAGS     ?=
-
-
-# Debug build flags
-ifeq ($(dbg),1)
-      NVCCFLAGS += -g -G
-      TARGET := debug
+########################
+###
+### Unity Configuration
+###
+########################
+#We try to detect the OS we are running on, and adjust commands as needed
+ifeq ($(OS),Windows_NT)
+  ifeq ($(shell uname -s),) # not in a bash-like shell
+	CLEANUP = del /F /Q
+	MKDIR = mkdir
+  else # in a bash-like shell, like msys
+	CLEANUP = rm -f
+	MKDIR = mkdir -p
+  endif
+	TARGET_EXTENSION=.exe
 else
-      TARGET := release
+	CLEANUP = rm -f
+	MKDIR = mkdir -p
+	TARGET_EXTENSION=.out
 endif
 
-ALL_CCFLAGS :=
-ALL_CCFLAGS += $(addprefix -Xcompiler ,$(CCFLAGS))
-ALL_CCFLAGS += $(addprefix -Xcompiler ,$(EXTRA_CCFLAGS))
+C_COMPILER=gcc
+ifeq ($(shell uname -s), Darwin)
+C_COMPILER=clang
+endif
 
-ALL_LDFLAGS :=
-ALL_LDFLAGS += $(ALL_CCFLAGS)
-ALL_LDFLAGS += $(addprefix -Xlinker ,$(LDFLAGS))
-ALL_LDFLAGS += $(addprefix -Xlinker ,$(EXTRA_LDFLAGS))
+UNITY_ROOT=Unity
+
+CFLAGS=-std=c99
+CFLAGS += -Wall
+CFLAGS += -Wextra
+CFLAGS += -Wpointer-arith
+CFLAGS += -Wcast-align
+CFLAGS += -Wwrite-strings
+CFLAGS += -Wswitch-default
+CFLAGS += -Wunreachable-code
+CFLAGS += -Winit-self
+CFLAGS += -Wmissing-field-initializers
+CFLAGS += -Wno-unknown-pragmas
+CFLAGS += -Wstrict-prototypes
+CFLAGS += -Wundef
+CFLAGS += -Wold-style-definition
+CFLAGS += -Wfatal-errors
+
+TARGET_BASE1=all_tests
+TARGET1 = $(TARGET_BASE1)$(TARGET_EXTENSION)
+UNITY_SRC_FILES=\
+  $(UNITY_ROOT)/src/unity.c \
+  $(UNITY_ROOT)/extras/fixture/src/unity_fixture.c \
+  test/TestSort.c \
+  test/test_runners/Test_Runner.c \
+  test/test_runners/all_tests.c
+INC_DIRS=-Isrc -I$(UNITY_ROOT)/src -I$(UNITY_ROOT)/extras/fixture/src
+SYMBOLS=
+
+########################
+###
+### END Unity Configuration
+###
+########################
 
 
-################################################################################
-# This part modified by Eugenio Pacceli Reis da Fonseca
-# DCC/UFMG
-# Target rules
-all: app
+SRC = 	src/array.h src/array.c \
+		src/get_opt.h src/get_opt.c \
+		src/sort.h src/sort.c
+TEST_MAIN = test/TestMain.c
+MAIN = src/main.c
+CPPCHECK_FLAGS = --enable=all
+VALGRIND_FLAGS = --leak-check=full --show-leak-kinds=all
+SANITIZER_FLAGS = -fsanitize=address
+GCOV_FLAGS = -fprofile-arcs -ftest-coverage
+OUT = sort
 
-array.o:array.c
-	gcc -o $@ -c $<
+all: clean cppcheck valgrind sanitizers test
+cppcheck: run-cppcheck
+valgrind: compile-test-main run-valgrind
+sanitizers: run-sanitizers run-sort
+test: compile-unity-tests run-unity-tests
 
-sort.o:sort.c
-	gcc -o $@ -c $<
+sort:
+	$(C_COMPILER) $(CFLAGS) -o $(OUT) $(SRC)
 
-get_opt.o:get_opt.c
-	gcc -o $@ -c $<
+compile-test-main:
+	$(C_COMPILER) $(CFLAGS) -o $(OUT) $(SRC) $(TEST_MAIN)
 
-main.o:main.c
-	gcc -o $@ -c $<
+run-cppcheck:
+	cppcheck $(CPPCHECK_FLAGS) $(SRC) $(MAIN)
 
-app: array.o sort.o get_opt.o main.o
-	gcc $(ALL_LDFLAGS) -o $@ $+ $(LIBRARIES)
+run-valgrind:
+	valgrind $(VALGRIND_FLAGS) ./$(OUT) $(ARGS)
+	
+run-sanitizers:
+	$(C_COMPILER) $(CFLAGS) $(SANITIZER_FLAGS) -o $(OUT) $(SRC) $(TEST_MAIN)
+	
+run-sort:
+	- ./$(OUT) $(ARGS)
 
-run: build
-	./app
+# Unity tests
+compile-unity-tests:
+	$(C_COMPILER) $(CFLAGS) $(GCOV_FLAGS) $(INC_DIRS) $(SYMBOLS) $(UNITY_SRC_FILES) -o $(TARGET1)
 
+run-unity-tests:
+	- ./$(TARGET1) -v
+
+# Clean up all
 clean:
-	rm -f *.o
-	rm -f app
+	$(CLEANUP) $(ALL) $(TARGET1) $(OUT) *.o cov* *.dSYM *.gcda *.gcno *.gcov
