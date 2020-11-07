@@ -60,9 +60,9 @@ SYMBOLS=
 ########################
 
 
-SRC = 	src/array.h src/array.c \
-		src/get_opt.h src/get_opt.c \
-		src/sort.h src/sort.c
+SRC = 	src/sort.h src/sort.c \
+	src/array.h src/array.c \
+	src/get_opt.h src/get_opt.c
 TEST_MAIN = test/TestMain.c
 MAIN = src/main.c
 CPPCHECK_FLAGS = --enable=all
@@ -97,7 +97,7 @@ run-sort:
 
 # Unity tests
 compile-unity-tests:
-	$(C_COMPILER) $(CFLAGS) $(GCOV_FLAGS) $(INC_DIRS) $(SYMBOLS) $(UNITY_SRC_FILES) -o $(TARGET1)
+	$(C_COMPILER) $(CFLAGS) $(GCOV_FLAGS) $(INC_DIRS) $(SYMBOLS) $(SRC) $(UNITY_SRC_FILES) -o $(TARGET1)
 
 run-unity-tests:
 	- ./$(TARGET1) -v

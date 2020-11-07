@@ -93,15 +93,15 @@ void get_opt(int argc, char **argv, int *method, int *size, int *array_type, int
     while(opt != -1) {
         switch(opt) {
             case 'a': // algorithm
-                *method = get_sort_method(optarg);
+                *method = get_sort_method(optString);
                 break;
 
             case 'n': // number of elements
-                *size   = get_array_size(optarg);
+                *size   = get_array_size(optString);
                 break;
 
             case 's': // (vector) situation
-                *array_type   = get_array_type(optarg);
+                *array_type   = get_array_type(optString);
                 break;
 
             case 'P': // print

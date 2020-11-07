@@ -13,4 +13,4 @@ addons:
 install:
   - "[ $GCC = gcc ] && export GCC=gcc || true"
 script:
-  #- make all
+  - make all
