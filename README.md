@@ -1,7 +1,7 @@
 sort
 ====
 
-[<img alt="Build Status" src="https://travis-ci.com/rochavinicius/sort.svg?branch=main" height="40">][travis-url]
+[![Build Status](https://travis-ci.org/rochavinicius/sort.svg?branch=main)](https://travis-ci.org/rochavinicius/sort)
 
 Obs.: **Modified to remove CUDA code.**
 
