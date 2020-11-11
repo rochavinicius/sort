@@ -14,6 +14,9 @@ void negativeAndPositive(void);
 void allNegativeNumbers(void);
 void repetedNumbers(void);
 void validatedIntMaxAndIntMin(void);
+void nullArray(void);
+void negativeSize(void);
+void oddVector(void);
 
 int main(void) {	
 	printf("Running test methods for each algorithm.\n");
@@ -25,6 +28,9 @@ int main(void) {
 	allNegativeNumbers();
 	repetedNumbers();
 	validatedIntMaxAndIntMin();
+	nullArray();
+	negativeSize();
+	oddVector();
 	
 	printf("Finished all tests.\n");
 	
@@ -186,6 +192,43 @@ void validatedIntMaxAndIntMin(void) {
     	vector[9] = INT_MIN;
     	
     	sort_array(vector, 10, methods[method]);
+		printf(" OK\n");
+	}
+}
+
+void nullArray(void) {
+	printf("[TEST]: nullArray\n");
+	
+	for (int method = 0; method < nrMethods; method++) {
+		printf("\t\tAlgorithm:  %s", methodName(method));
+    	
+    	sort_array(NULL, 10, methods[method]);
+		printf(" OK\n");
+	}
+}
+
+void negativeSize(void) {
+	printf("[TEST]: negativeSize\n");
+	
+	for (int method = 0; method < nrMethods; method++) {
+		printf("\t\tAlgorithm:  %s", methodName(method));
+		
+		int vector[] = {10,9,8,7,6,5,4,3,2,1};
+    	
+    		sort_array(vector, -1, methods[method]);
+		printf(" OK\n");
+	}
+}
+
+void oddVector(void) {
+	printf("[TEST]: oddVector\n");
+	
+	for (int method = 0; method < nrMethods; method++) {
+		printf("\t\tAlgorithm:  %s", methodName(method));
+		
+		int vector[] = {3,2,1};
+    	
+    		sort_array(vector, 3, methods[method]);
 		printf(" OK\n");
 	}
 }

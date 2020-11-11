@@ -3,6 +3,11 @@ sort
 
 [![Build Status](https://travis-ci.org/rochavinicius/sort.svg?branch=main)](https://travis-ci.org/rochavinicius/sort)
 
+Clone: 
+```shell
+$ git clone --recursive https://github.com/rochavinicius/sort.git
+```
+
 Obs.: **Modified to remove CUDA code.**
 
 

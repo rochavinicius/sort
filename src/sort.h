@@ -38,8 +38,8 @@ extern double elapsed_time;
 void selection_sort(int *vet, int tam);
 void insertion_sort(int *array, int size);
 void shell_sort(int *vet, int size);
-void quick_sort(int vet[], int left, int right);
-void heap_sort(int vet[], int n);
+void quick_sort(int *vet, int left, int right);
+void heap_sort(int *vet, int n);
 void merge_sort(int* vet, int n);
 
 int* sort_array(int *vet, int size, int method);

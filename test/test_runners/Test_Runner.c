@@ -3,11 +3,14 @@
 
 TEST_GROUP_RUNNER(sort)
 {
-    RUN_TEST_CASE(sort, allPositiveElements);
+	RUN_TEST_CASE(sort, allPositiveElements);
 	RUN_TEST_CASE(sort, halfSizeArray);
 	RUN_TEST_CASE(sort, alreadOrdered);
 	RUN_TEST_CASE(sort, negativeAndPositive);
 	RUN_TEST_CASE(sort, allNegativeNumbers);
 	RUN_TEST_CASE(sort, repetedNumbers);
 	RUN_TEST_CASE(sort, validatedIntMaxAndIntMin);
+	RUN_TEST_CASE(sort, nullArray);
+	RUN_TEST_CASE(sort, negativeSize);
+	RUN_TEST_CASE(sort, oddVector);
 }

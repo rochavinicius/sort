@@ -153,7 +153,45 @@ TEST(sort, validatedIntMaxAndIntMin)
     	
     	sort_array(vector, 10, methods[method]);
     	
-    	TEST_ASSERT_EQUAL_INT_ARRAY (expected, vector, 10);
-	}	
+    	TEST_ASSERT_EQUAL_INT_ARRAY(expected, vector, 10);
+    }	
+}
+
+TEST(sort, nullArray)
+{	
+    for (int method = 0; method < nrMethods; method++)
+    {    	
+    	TEST_ASSERT_NULL(sort_array(NULL, 10, methods[method]));
+    }	
+}
+
+TEST(sort, negativeSize)
+{
+    int expected[] ={10,9,8,7,6,5,4,3,2,1};
+	
+    for (int method = 0; method < nrMethods; method++)
+    {   
+	for(int i=0; i < 10; i++)
+    	{
+    	    vector[i] = expected[i];
+    	}
+    	sort_array(vector, -1, methods[method]);
+    	
+    	TEST_ASSERT_EQUAL_INT_ARRAY(expected, vector, 10);
+    }	
+}
+
+TEST(sort, oddVector)
+{
+    int expected[] = {1,2,3};
+	
+    for (int method = 0; method < nrMethods; method++)
+    {   
+	int vec[] = {3,2,1};
+
+    	sort_array(vec, 3, methods[method]);
+    	
+    	TEST_ASSERT_EQUAL_INT_ARRAY(expected, vec, 3);
+    }	
 }
 

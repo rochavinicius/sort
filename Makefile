@@ -9,12 +9,12 @@ ifeq ($(OS),Windows_NT)
 	CLEANUP = del /F /Q
 	MKDIR = mkdir
   else # in a bash-like shell, like msys
-	CLEANUP = rm -f
+	CLEANUP = rm -rf
 	MKDIR = mkdir -p
   endif
 	TARGET_EXTENSION=.exe
 else
-	CLEANUP = rm -f
+	CLEANUP = rm -rf
 	MKDIR = mkdir -p
 	TARGET_EXTENSION=.out
 endif
@@ -60,12 +60,12 @@ SYMBOLS=
 ########################
 
 
-SRC = 	src/sort.h src/sort.c \
-	src/array.h src/array.c \
-	src/get_opt.h src/get_opt.c
+SRC = 	src/sort.c \
+	src/array.c \
+	src/get_opt.c
 TEST_MAIN = test/TestMain.c
 MAIN = src/main.c
-CPPCHECK_FLAGS = --enable=all
+CPPCHECK_FLAGS = --enable=all --suppress=missingIncludeSystem
 VALGRIND_FLAGS = --leak-check=full --show-leak-kinds=all
 SANITIZER_FLAGS = -fsanitize=address
 GCOV_FLAGS = -fprofile-arcs -ftest-coverage

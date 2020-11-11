@@ -29,6 +29,10 @@ int numberOfSwaps;
 
 void selection_sort(int *array, int size){
     int i, j, min, aux;
+
+    if (array == NULL || size < 0)
+        return;
+
       for (i = 0; i < (size-1); i++){
         min = i;
         for (j = (i+1); j < size; j++) {
@@ -49,6 +53,10 @@ void selection_sort(int *array, int size){
 
 void insertion_sort(int *array, int size) {
    int i, j, selected;
+
+    if (array == NULL || size < 0)
+        return;
+
    for (i = 1; i < size; i++){
       selected = array[i];
       j = i - 1;
@@ -65,6 +73,10 @@ void insertion_sort(int *array, int size) {
 void shell_sort(int *array, int size) {
     int i , j , value;
     int gap = 1;
+
+    if (array == NULL || size < 0)
+        return;
+
     while(gap < size) {
         gap = 3*gap+1;
     }
@@ -84,10 +96,13 @@ void shell_sort(int *array, int size) {
     }
 }
 
-void quick_sort(int array[], int left, int right) {
+void quick_sort(int *array, int left, int right) {
     int i, j, pivot, y;
     i = left;
     j = right;
+
+    if (array == NULL || left < 0 || right < 0)
+        return;
 
     pivot = array[(i+j) / 2];
 
@@ -152,8 +167,11 @@ void heapify(int arr[], int n, int i)
 } 
   
 // main function to do heap sort 
-void heap_sort(int arr[], int n) 
+void heap_sort(int *arr, int n) 
 { 
+    if (arr == NULL || n < 0)
+        return;
+
     // Build heap (rearrange array) 
     for (int i = n / 2 - 1; i >= 0; i--) 
         heapify(arr, n, i); 
@@ -238,6 +256,9 @@ void top_down_merge(int* a,int begin,int end,int* b){
 }
 
 void merge_sort(int* a,int n){
+    if (a == NULL || n < 0)
+        return;
+
     int* b = (int*)malloc(sizeof(int)*n);
     top_down_merge(a, 0, n, b);
     free(b);
