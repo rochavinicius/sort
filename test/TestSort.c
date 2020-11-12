@@ -19,7 +19,7 @@ TEST_TEAR_DOWN(sort)
 
 TEST(sort, allPositiveElements)
 {
-	int expected[] ={1,2,3,4,5,6,7,8,9,10};
+	int expected[] ={1,2,3,4,5,6,7,8,9,9};
 	
 	for (int method = 0; method < nrMethods; method++)
     {
