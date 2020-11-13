@@ -93,14 +93,15 @@ run-sanitizers:
 	$(C_COMPILER) $(CFLAGS) $(SANITIZER_FLAGS) -o $(OUT) $(SRC) $(TEST_MAIN)
 	
 run-sort:
-	- ./$(OUT) $(ARGS)
+	./$(OUT) $(ARGS)
 
 # Unity tests
 compile-unity-tests:
 	$(C_COMPILER) $(CFLAGS) $(GCOV_FLAGS) $(INC_DIRS) $(SYMBOLS) $(SRC) $(UNITY_SRC_FILES) -o $(TARGET1)
 
 run-unity-tests:
-	- ./$(TARGET1) -v
+	./$(TARGET1) -v
+	exit $?
 
 # Clean up all
 clean:
