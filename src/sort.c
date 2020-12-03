@@ -34,7 +34,7 @@ void selection_sort(int *array, int size){
         return;
 
       for (i = 0; i < (size-1); i++){
-        min = i;
+        min = 0; //Garibotti (original): min = i;
         for (j = (i+1); j < size; j++) {
             numberOfComparisons++;
             if(array[j] < array[min]){
